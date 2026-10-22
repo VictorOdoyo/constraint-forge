@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {Model} from '../src/index.js';import {validate} from '../src/validate.js';
+test('independent validation identifies domain and constraint violations',()=>{const m=new Model().variable('a',[1,2]).variable('b',[1,2]).allDifferent(['a','b']);assert.ok(validate(m,{a:1,b:2}).valid);assert.equal(validate(m,{a:1,b:1}).errors[0].kind,'constraint');assert.ok(validate(m,{a:3}).errors.some(e=>e.kind==='missing'));});
