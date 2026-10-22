@@ -19,6 +19,11 @@ export function propagate(domains, constraints, stats, checkpoint = () => {}, se
       }
       return reachable.has(c.target);
     }
+    let cache = topology.residues.get(c);
+    if(!cache){cache=new Map();topology.residues.set(c,cache);}
+    let byValue=cache.get(fixed);if(!byValue){byValue=new Map();cache.set(fixed,byValue);}
+    const previous=byValue.get(value);
+    if(previous&&c.scope.every((k,i)=>domains.get(k).includes(previous[i]))) { checkpoint();stats.cacheHits=(stats.cacheHits||0)+1;return true; }
     const tuple = [];
     function visit(i) {
       checkpoint();
@@ -33,7 +38,7 @@ export function propagate(domains, constraints, stats, checkpoint = () => {}, se
       }
       return false;
     }
-    return visit(0);
+    const found=visit(0);if(found)byValue.set(value,[...tuple]);return found;
   }
   if ([...domains.values()].some(d => !d.length)) return false;
   for (let head = 0; head < queue.length; head++) {
