@@ -35,3 +35,5 @@ export { absolute } from './constraints/absolute.js';
 export { inverse } from './constraints/inverse.js';
 
 export { circuit } from './constraints/circuit.js';
+
+export { countValue } from './constraints/countValue.js';
