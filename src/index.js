@@ -47,3 +47,5 @@ export { noOverlap } from './constraints/noOverlap.js';
 export { precedence } from './constraints/precedence.js';
 
 export { hamming } from './constraints/hamming.js';
+
+export { optimize } from './optimize.js';
