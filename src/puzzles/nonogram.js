@@ -1,5 +1,16 @@
 import { Model } from '../model.js';
-import { table } from '../constraints/table.js';
+import { regular } from '../constraints/regular.js';
+export function lineAutomaton(runs) {
+  if (!Array.isArray(runs) || runs.some(n=>!Number.isSafeInteger(n)||n<1)) throw new TypeError('Invalid nonogram runs');
+  const transitions=[[0,0,0]];
+  let state=0;
+  runs.forEach((run,index)=>{
+    for(let i=0;i<run;i++) { transitions.push([state,1,state+1]);state++; }
+    if(index<runs.length-1) { transitions.push([state,0,state+1]);state++; }
+    transitions.push([state,0,state]);
+  });
+  return {start:0,accept:[state],transitions};
+}
 export function linePatterns(length, runs) {
   if (!Number.isInteger(length) || length < 0 || runs.some((n) => !Number.isInteger(n) || n < 1))
     throw new TypeError('Invalid nonogram line');
@@ -26,17 +37,17 @@ export function nonogram(rowClues, columnClues) {
   if (!h || !w) throw new TypeError('Grid must be nonempty');
   for (let r = 0; r < h; r++) for (let c = 0; c < w; c++) m.variable(r + ',' + c, [0, 1]);
   rowClues.forEach((runs, r) =>
-    table(
+    regular(
       m,
       Array.from({ length: w }, (_, c) => r + ',' + c),
-      linePatterns(w, runs),
+      lineAutomaton(runs),
     ),
   );
   columnClues.forEach((runs, c) =>
-    table(
+    regular(
       m,
       Array.from({ length: h }, (_, r) => r + ',' + c),
-      linePatterns(h, runs),
+      lineAutomaton(runs),
     ),
   );
   return m;
