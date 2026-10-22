@@ -1,0 +1,11 @@
+{
+  "name": "@victorodoyo/constraint-forge",
+  "version": "0.1.0",
+  "description": "Inspectable finite-domain constraint solving and puzzle generation",
+  "type": "module",
+  "license": "MIT",
+  "engines": { "node": ">=22" },
+  "exports": "./src/index.js",
+  "bin": { "constraint-forge": "./src/cli.js" },
+  "scripts": { "test": "node --test", "bench": "node bench/run.js" }
+}
