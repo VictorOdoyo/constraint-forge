@@ -10,6 +10,15 @@ export function propagate(domains, constraints, stats, checkpoint = () => {}, se
     if (c.kind === 'table') {
       return c.tuples.some(row => { checkpoint(); stats.checks++; return c.scope.every((k,i)=>k===fixed ? row[i]===value : domains.get(k).includes(row[i])); });
     }
+    if (c.kind === 'sum') {
+      let reachable = new Set([0]);
+      for (const k of c.scope) {
+        const next = new Set();
+        for (const total of reachable) for (const v of k===fixed ? [value] : domains.get(k)) { checkpoint(); stats.checks++; next.add(total+v); }
+        reachable = next;
+      }
+      return reachable.has(c.target);
+    }
     const tuple = [];
     function visit(i) {
       checkpoint();
