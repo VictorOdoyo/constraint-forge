@@ -33,3 +33,5 @@ export { modulo } from './constraints/modulo.js';
 export { absolute } from './constraints/absolute.js';
 
 export { inverse } from './constraints/inverse.js';
+
+export { circuit } from './constraints/circuit.js';
