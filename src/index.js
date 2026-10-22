@@ -15,3 +15,5 @@ export { element } from './constraints/element.js';
 export { regular } from './constraints/regular.js';
 
 export { linear } from './constraints/linear.js';
+
+export { reify } from './constraints/reify.js';
