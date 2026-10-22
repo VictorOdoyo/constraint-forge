@@ -1,6 +1,6 @@
 {
   "name": "@victorodoyo/constraint-forge",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "Inspectable finite-domain constraint solving and puzzle generation",
   "type": "module",
   "license": "MIT",
@@ -16,12 +16,20 @@
     "bench": "node bench/run.js",
     "pack:check": "node scripts/pack-check.mjs",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "explore": "node scripts/explore.mjs",
+    "bench:validate": "node bench/validate.js",
+    "bench:report": "node bench/report.js",
+    "examples": "node examples/workflows.mjs"
   },
   "files": [
     "src",
     "docs",
     "bench",
+    "web",
+    "scripts",
+    "examples",
+    "CHANGELOG.md",
     "README.md",
     "LICENSE"
   ],
