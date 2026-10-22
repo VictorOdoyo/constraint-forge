@@ -10,7 +10,7 @@ export class SearchInterrupted extends Error {
 export class Solver {
   constructor(model) { this.model = model; }
 
-  solve({ limit = Infinity, maxNodes = Infinity, timeoutMs = Infinity, signal, onSolution } = {}) {
+  solve({ limit = Infinity, maxNodes = Infinity, timeoutMs = Infinity, signal, onSolution, collect = true } = {}) {
     if (!(limit === Infinity || Number.isSafeInteger(limit) && limit >= 1) ||
         !(maxNodes === Infinity || Number.isSafeInteger(maxNodes) && maxNodes >= 1) ||
         !(timeoutMs >= 0)) throw new RangeError('Invalid search budget');
@@ -35,9 +35,10 @@ export class Solver {
       if (!propagate(current, constraints, stats, checkpoint, (k, v) => trail.set(k, v), topology)) { stats.failures++; return; }
       const candidates = [...current].filter(([, d]) => d.length > 1);
       if (!candidates.length) {
-        results.push(Object.fromEntries([...current].map(([k, d]) => [k, d[0]])));
+        const solution = Object.fromEntries([...current].map(([k, d]) => [k, d[0]]));
+        if (collect) results.push(solution);
         stats.solutions++;
-        onSolution?.({ ...results[results.length - 1] });
+        onSolution?.({ ...solution });
         return;
       }
       candidates.sort((a, b) => a[1].length - b[1].length || degree.get(b[0]) - degree.get(a[0]));
@@ -46,14 +47,14 @@ export class Solver {
         const mark = trail.mark();
         try { trail.set(key, [value]); search(current, depth + 1); }
         finally { trail.undo(mark); }
-        if (results.length >= limit) return;
+        if (stats.solutions >= limit) return;
       }
     }
     let status = 'complete';
     let reason;
     try {
       search(domains, 0);
-      if (results.length >= limit) status = 'limit';
+      if (stats.solutions >= limit) status = 'limit';
     } catch (e) {
       if (!(e instanceof SearchInterrupted)) throw e;
       status = 'interrupted'; reason = e.message;
