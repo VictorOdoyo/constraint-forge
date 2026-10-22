@@ -26,7 +26,17 @@ reachable partial totals using BigInt to avoid precision loss. Global allDiffere
 tests injective variable/value matchings while fixing each candidate value. This
 achieves domain consistency using repeated augmenting paths; it is not Regin's
 more efficient SCC-based filtering algorithm. Sum reachability may still grow
-exponentially when partial sums do not merge.
+exponentially when partial sums do not merge. Exactly representable integer
+weighted equalities reuse reachability with BigInt terms; inequalities use
+separable bounds. Floating relations retain the generic predicate semantics.
+
+Regular automata propagate supports by following reachable states in a layered
+graph, rather than enumerating whole words. Nonogram rows and columns compile to
+compact automata with mandatory separators and optional zero runs. Their JSON
+representation and worker transfer preserve this structure. Cumulative resource
+constraints use compulsory intervals [latest start, earliest finish), adding the
+fixed candidate's full interval. Overload pruning is sound but weaker than full
+GAC; at singleton leaves the profile exactly checks the assignment.
 
 Linear branch and bound maintains a strictly decreasing incumbent cutoff. Its
 dedicated propagator computes separable lower bounds under a fixed candidate.
@@ -58,8 +68,9 @@ synchronous and has a tuple budget. Batch failure aborts sibling workers.
 
 ## Scope and practical limits
 
-General predicates, long automata, cumulative scheduling, and broad arithmetic
-scopes can be exponential. Specialized models are demonstrations of constraint
+General predicates and broad integer-equality reachability sets can be exponential.
+Timetable resource filtering is incomplete and relies on search to resolve remaining
+choices. Specialized models are demonstrations of constraint
 modeling, not substitutes for industrial CP-SAT or mixed-integer solvers. Domain
 inspection structures are publicly mutable; callers must treat them as immutable
 during search. Optimization callbacks and predicates must not mutate objectives.
@@ -67,5 +78,6 @@ during search. Optimization callbacks and predicates must not mutate objectives.
 Generated Sudoku grids are symmetry transforms of a canonical grid, not uniform
 samples of all completed grids. Per-check deadlines can change generated output
 across machines. Human deduction helpers explain local rules; the reported
-difficulty profile has no empirical calibration. SVG rendering is deterministic
-and has no interactive UI. These are intentional boundaries for this release.
+difficulty profile has no empirical calibration. SVG rendering is deterministic;
+the separate browser explorer adds interactive editing and search inspection.
+These are intentional boundaries for this release.

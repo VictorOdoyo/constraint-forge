@@ -67,10 +67,14 @@ Scopes contain distinct, previously declared variable names.
 | noOverlap   | starts, durations                            | Half-open disjoint intervals; zero duration is empty      |
 | cumulative  | starts, durations, demands, capacity         | Renewable resource capacity                               |
 
-Table, sum, and global allDifferent have dedicated propagators. Other builders
-use generic tuple support and are intended for moderate scopes. Numeric linear
-relations use exact JS comparison, without a floating tolerance. Do not use them
-as an arbitrary-precision real arithmetic solver.
+Table, sum, global allDifferent, regular automata, exactly representable integer
+linear relations, and cumulative resource constraints have dedicated propagators.
+DFA support uses layered state reachability. Integer equality uses BigInt partial
+totals; inequalities use separable extrema. Cumulative uses compulsory-part
+timetables: filtering is sound, but can be weaker than generic arc consistency.
+All other builders use generic tuple support and are intended for moderate scopes.
+Noninteger linear relations retain exact JS comparison without a floating tolerance.
+Do not use them as an arbitrary-precision real arithmetic solver.
 
 ## Optimization and diagnostics
 
@@ -99,8 +103,9 @@ internal onSolution callback and does not forward an external callback.
 ## Portability and workers
 
 serialize(model, {maxTuples:100000}) produces a version-1 data-only document.
-Global allDifferent, sum, and table constraints stay structural. Other predicates
-are materialized as tables under a total tuple-evaluation budget. deserialize(data)
+Global allDifferent, sum, table, regular, linearInteger, and cumulative constraints
+stay structural. Other predicates are materialized as tables under a total
+tuple-evaluation budget. deserialize(data)
 rejects unknown kinds and invalid model structure. This format contains no code.
 
 solveAsync(model, {signal,wallTimeoutMs,...searchOptions}) serializes synchronously,
@@ -145,3 +150,25 @@ read a version-1 model document from the named file. All results are JSON.
 Exit 1 indicates invalid input, worker rejection, or a processing error. Exit 2
 indicates an interrupted solve result. An unsatisfiable result is valid output
 and exits successfully. Worker wall timeouts reject and therefore exit 1.
+
+## Browser explorer
+
+Run `npm run explore` for a localhost-only server on port 4173. `npm run explore -- 0`
+selects an available port. The packaged server exposes browser assets and solver
+modules only, rejects write methods, and sets a self-only content security policy.
+The browser imports browser-safe source modules directly rather than the Node
+package barrel, which also exposes Node worker APIs.
+
+The workbench supports Sudoku, Queens boards of size 1–12, and Nonograms up to
+30 by 30. Each solve has a 250,000-node and ten-second cooperative budget, plus
+a fifteen-second main-thread worker deadline. Queens solution caps are 1–2,000;
+Sudoku and Nonogram use two solutions for multiplicity detection. Traces retain
+the first 2,000 events and report the full event count. Trace depth charts and
+decisions are diagnostics; complete status is the proof of exhaustion.
+
+Sudoku generation accepts a uint32 seed and 17–81 target clues; a lower clue
+count is best effort. Each uniqueness check has a 500 ms deadline, and the
+whole browser job can be terminated at fifteen seconds. A result is displayed
+only after the job succeeds. Stop discards partial worker results. Workspace
+inputs persist in browser localStorage when available. Exports are local file
+downloads. There are no accounts, analytics requests, or cloud puzzle storage.
