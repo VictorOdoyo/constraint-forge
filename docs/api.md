@@ -17,17 +17,17 @@ solution semantics, but the global version can prune Hall-set values.
 
 `new Solver(model).solve(options)` accepts:
 
-| Option | Default | Meaning |
-| --- | --- | --- |
-| limit | Infinity | Maximum number of solutions encountered |
-| maxNodes | Infinity | Search-node budget |
-| timeoutMs | Infinity | Cooperative elapsed-time budget |
-| signal | undefined | AbortSignal checked during search |
-| collect | true | Retain assignments; false supports count-only enumeration |
-| onSolution | undefined | Callback receiving an isolated assignment |
-| onTrace | undefined | Callback receiving immutable search events |
-| variableOrder | mrv | mrv or dom-wdeg |
-| valueOrder | input | input or lcv; LCV scores binary predicates |
+| Option        | Default   | Meaning                                                   |
+| ------------- | --------- | --------------------------------------------------------- |
+| limit         | Infinity  | Maximum number of solutions encountered                   |
+| maxNodes      | Infinity  | Search-node budget                                        |
+| timeoutMs     | Infinity  | Cooperative elapsed-time budget                           |
+| signal        | undefined | AbortSignal checked during search                         |
+| collect       | true      | Retain assignments; false supports count-only enumeration |
+| onSolution    | undefined | Callback receiving an isolated assignment                 |
+| onTrace       | undefined | Callback receiving immutable search events                |
+| variableOrder | mrv       | mrv or dom-wdeg                                           |
+| valueOrder    | input     | input or lcv; LCV scores binary predicates                |
 
 Results contain status, solutions, stats, and an interruption reason when needed.
 Status complete proves exhaustion; limit is conservative even if the last
@@ -42,30 +42,30 @@ predicate supports when present. Trace events are diagnostics, not proof certifi
 Every builder takes a model as its first argument and returns that model.
 Scopes contain distinct, previously declared variable names.
 
-| Builder | Remaining arguments | Semantics |
-| --- | --- | --- |
-| table | scope, tuples | Assignment belongs to an explicit relation |
-| sum | scope, target | Exact safe-integer inputs, BigInt intermediate arithmetic |
-| product | scope, target | Exact integer product using BigInt |
-| linear | scope, coefficients, eq/le/ge, rhs | Numeric weighted relation using JS Number |
-| cardinality | scope, Map(value,count) | Exact occurrences; object form supports string values |
-| countValue | scope, value, countVariable | Variable occurrence count |
-| among | scope, values, min, max=min | Bounds membership count |
-| element | indexVariable, constantArray, resultVariable | Zero-based lookup |
-| regular | scope, {start,accept,transitions} | Deterministic automaton; edges are [from,symbol,to] |
-| reify | scope, flag, predicate | flag in {0,1} iff predicate holds |
-| implies | flag, scope, predicate | Enabled Boolean guard implies predicate |
-| nogood | partialAssignment | Exclude one partial assignment |
-| lexLess | left, right, {strict=true} | Lexicographic vector comparison |
-| increasing | scope, {strict=true} | Monotone sequence |
-| modulo | variable, divisor, remainder | Euclidean residue |
-| absolute | left, right, distance | Absolute numeric difference |
-| inverse | left, right | Inverse zero-based permutations |
-| circuit | successors | One Hamiltonian cycle through all indices |
-| hamming | left, right, min, max | Distance bounds |
-| precedence | before, after, {duration=0,lag=0} | Timed ordering |
-| noOverlap | starts, durations | Half-open disjoint intervals; zero duration is empty |
-| cumulative | starts, durations, demands, capacity | Renewable resource capacity |
+| Builder     | Remaining arguments                          | Semantics                                                 |
+| ----------- | -------------------------------------------- | --------------------------------------------------------- |
+| table       | scope, tuples                                | Assignment belongs to an explicit relation                |
+| sum         | scope, target                                | Exact safe-integer inputs, BigInt intermediate arithmetic |
+| product     | scope, target                                | Exact integer product using BigInt                        |
+| linear      | scope, coefficients, eq/le/ge, rhs           | Numeric weighted relation using JS Number                 |
+| cardinality | scope, Map(value,count)                      | Exact occurrences; object form supports string values     |
+| countValue  | scope, value, countVariable                  | Variable occurrence count                                 |
+| among       | scope, values, min, max=min                  | Bounds membership count                                   |
+| element     | indexVariable, constantArray, resultVariable | Zero-based lookup                                         |
+| regular     | scope, {start,accept,transitions}            | Deterministic automaton; edges are [from,symbol,to]       |
+| reify       | scope, flag, predicate                       | flag in {0,1} iff predicate holds                         |
+| implies     | flag, scope, predicate                       | Enabled Boolean guard implies predicate                   |
+| nogood      | partialAssignment                            | Exclude one partial assignment                            |
+| lexLess     | left, right, {strict=true}                   | Lexicographic vector comparison                           |
+| increasing  | scope, {strict=true}                         | Monotone sequence                                         |
+| modulo      | variable, divisor, remainder                 | Euclidean residue                                         |
+| absolute    | left, right, distance                        | Absolute numeric difference                               |
+| inverse     | left, right                                  | Inverse zero-based permutations                           |
+| circuit     | successors                                   | One Hamiltonian cycle through all indices                 |
+| hamming     | left, right, min, max                        | Distance bounds                                           |
+| precedence  | before, after, {duration=0,lag=0}            | Timed ordering                                            |
+| noOverlap   | starts, durations                            | Half-open disjoint intervals; zero duration is empty      |
+| cumulative  | starts, durations, demands, capacity         | Renewable resource capacity                               |
 
 Table, sum, and global allDifferent have dedicated propagators. Other builders
 use generic tuple support and are intended for moderate scopes. Numeric linear

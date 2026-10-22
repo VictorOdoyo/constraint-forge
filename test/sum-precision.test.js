@@ -1,2 +1,9 @@
-import test from 'node:test';import assert from 'node:assert/strict';import {Model,Solver,sum} from '../src/index.js';
-test('sum remains exact when intermediate totals exceed safe integer precision',()=>{const n=Number.MAX_SAFE_INTEGER;const m=new Model().variable('a',[n]).variable('b',[2]).variable('c',[-n]);sum(m,['a','b','c'],2);assert.equal(new Solver(m).solve().stats.solutions,1);});
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { Model, Solver, sum } from '../src/index.js';
+test('sum remains exact when intermediate totals exceed safe integer precision', () => {
+  const n = Number.MAX_SAFE_INTEGER;
+  const m = new Model().variable('a', [n]).variable('b', [2]).variable('c', [-n]);
+  sum(m, ['a', 'b', 'c'], 2);
+  assert.equal(new Solver(m).solve().stats.solutions, 1);
+});

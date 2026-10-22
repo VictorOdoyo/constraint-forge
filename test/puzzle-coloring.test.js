@@ -1,2 +1,21 @@
-import test from 'node:test';import assert from 'node:assert/strict';import {Solver} from '../src/index.js';import {coloring} from '../src/puzzles/coloring.js';
-test('triangle requires three colors and rejects self loops',()=>{assert.equal(new Solver(coloring(['a','b','c'],[['a','b'],['b','c'],['c','a']],[0,1,2])).solve().stats.solutions,6);assert.equal(new Solver(coloring(['a'],[['a','a']],[0])).solve().stats.solutions,0);});
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { Solver } from '../src/index.js';
+import { coloring } from '../src/puzzles/coloring.js';
+test('triangle requires three colors and rejects self loops', () => {
+  assert.equal(
+    new Solver(
+      coloring(
+        ['a', 'b', 'c'],
+        [
+          ['a', 'b'],
+          ['b', 'c'],
+          ['c', 'a'],
+        ],
+        [0, 1, 2],
+      ),
+    ).solve().stats.solutions,
+    6,
+  );
+  assert.equal(new Solver(coloring(['a'], [['a', 'a']], [0])).solve().stats.solutions, 0);
+});

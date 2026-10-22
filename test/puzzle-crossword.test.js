@@ -1,2 +1,17 @@
-import test from 'node:test';import assert from 'node:assert/strict';import {Solver} from '../src/index.js';import {crossword} from '../src/puzzles/crossword.js';
-test('crossword crossings agree on shared letters',()=>{const m=crossword([{name:'across',length:3,words:['CAT','DOG']},{name:'down',length:3,words:['ANT','OWL']}],[{a:'across',ai:1,b:'down',bi:0}]);assert.deepEqual(new Solver(m).solve().solutions,[{across:'CAT',down:'ANT'},{across:'DOG',down:'OWL'}]);});
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { Solver } from '../src/index.js';
+import { crossword } from '../src/puzzles/crossword.js';
+test('crossword crossings agree on shared letters', () => {
+  const m = crossword(
+    [
+      { name: 'across', length: 3, words: ['CAT', 'DOG'] },
+      { name: 'down', length: 3, words: ['ANT', 'OWL'] },
+    ],
+    [{ a: 'across', ai: 1, b: 'down', bi: 0 }],
+  );
+  assert.deepEqual(new Solver(m).solve().solutions, [
+    { across: 'CAT', down: 'ANT' },
+    { across: 'DOG', down: 'OWL' },
+  ]);
+});

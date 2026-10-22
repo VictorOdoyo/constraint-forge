@@ -14,7 +14,9 @@
   "scripts": {
     "test": "node --test",
     "bench": "node bench/run.js",
-    "pack:check": "node scripts/pack-check.mjs"
+    "pack:check": "node scripts/pack-check.mjs",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "files": [
     "src",
@@ -26,5 +28,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/VictorOdoyo/constraint-forge.git"
+  },
+  "devDependencies": {
+    "prettier": "3.6.2"
   }
 }

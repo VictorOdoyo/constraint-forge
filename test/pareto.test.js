@@ -1,2 +1,11 @@
-import test from 'node:test';import assert from 'node:assert/strict';import {Model} from '../src/index.js';import {pareto} from '../src/pareto.js';
-test('Pareto enumeration retains incomparable trade-offs only',()=>{const m=new Model().variable('x',[0,1,2]).variable('y',[0,1]);const r=pareto(m,[s=>s.x,s=>-s.x+s.y]);assert.equal(r.frontier.length,3);assert.ok(r.complete);assert.ok(r.frontier.every(p=>p.solution.y===0));});
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { Model } from '../src/index.js';
+import { pareto } from '../src/pareto.js';
+test('Pareto enumeration retains incomparable trade-offs only', () => {
+  const m = new Model().variable('x', [0, 1, 2]).variable('y', [0, 1]);
+  const r = pareto(m, [(s) => s.x, (s) => -s.x + s.y]);
+  assert.equal(r.frontier.length, 3);
+  assert.ok(r.complete);
+  assert.ok(r.frontier.every((p) => p.solution.y === 0));
+});

@@ -1,2 +1,14 @@
-import test from 'node:test';import assert from 'node:assert/strict';import {Model} from '../src/model.js';import {solveAsync} from '../src/async.js';
-test('serialization failures consistently reject worker promises',async()=>{const m=new Model();for(let i=0;i<7;i++)m.variable('x'+i,Array.from({length:10},(_,j)=>j));m.constrain([...m.domains.keys()],()=>true);await assert.rejects(solveAsync(m),/tuple budget/);});
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { Model } from '../src/model.js';
+import { solveAsync } from '../src/async.js';
+test('serialization failures consistently reject worker promises', async () => {
+  const m = new Model();
+  for (let i = 0; i < 7; i++)
+    m.variable(
+      'x' + i,
+      Array.from({ length: 10 }, (_, j) => j),
+    );
+  m.constrain([...m.domains.keys()], () => true);
+  await assert.rejects(solveAsync(m), /tuple budget/);
+});

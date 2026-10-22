@@ -6,7 +6,13 @@ const cases = [
   ['queens-8-enumerate', () => queens(8)],
   ['sudoku-reference', () => sudoku(puzzle)],
 ];
-const report = { node: process.version, platform: process.platform, arch: process.arch, cpu: os.cpus()[0]?.model, cases: [] };
+const report = {
+  node: process.version,
+  platform: process.platform,
+  arch: process.arch,
+  cpu: os.cpus()[0]?.model,
+  cases: [],
+};
 for (const [name, model] of cases) {
   const result = new Solver(model()).solve({ timeoutMs: 30000 });
   report.cases.push({ name, status: result.status, ...result.stats });

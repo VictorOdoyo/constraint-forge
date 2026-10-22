@@ -1,3 +1,14 @@
-import test from 'node:test';import assert from 'node:assert/strict';import {queens} from '../src/index.js';import {solveAsync} from '../src/async.js';
-test('live abort terminates an active worker',async()=>{const controller=new AbortController();const pending=solveAsync(queens(14),{signal:controller.signal});setTimeout(()=>controller.abort(),10);await assert.rejects(pending,/aborted/);});
-test('wall budgets terminate workers without claiming search exhaustion',async()=>{await assert.rejects(solveAsync(queens(12),{wallTimeoutMs:1}),/Wall time/);await assert.rejects(solveAsync(queens(4),{signal:AbortSignal.abort()}),/aborted/);});
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { queens } from '../src/index.js';
+import { solveAsync } from '../src/async.js';
+test('live abort terminates an active worker', async () => {
+  const controller = new AbortController();
+  const pending = solveAsync(queens(14), { signal: controller.signal });
+  setTimeout(() => controller.abort(), 10);
+  await assert.rejects(pending, /aborted/);
+});
+test('wall budgets terminate workers without claiming search exhaustion', async () => {
+  await assert.rejects(solveAsync(queens(12), { wallTimeoutMs: 1 }), /Wall time/);
+  await assert.rejects(solveAsync(queens(4), { signal: AbortSignal.abort() }), /aborted/);
+});

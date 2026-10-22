@@ -1,2 +1,17 @@
-import test from 'node:test';import assert from 'node:assert/strict';import {Solver} from '../src/index.js';import {kakuro} from '../src/puzzles/kakuro.js';
-test('intersecting Kakuro runs share decisions',()=>{const r=new Solver(kakuro(['a','b','c'],[{cells:['a','b'],total:3},{cells:['b','c'],total:4}])).solve();assert.equal(r.stats.solutions,1);assert.ok(r.solutions.every(s=>s.a+s.b===3&&s.b+s.c===4));});
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { Solver } from '../src/index.js';
+import { kakuro } from '../src/puzzles/kakuro.js';
+test('intersecting Kakuro runs share decisions', () => {
+  const r = new Solver(
+    kakuro(
+      ['a', 'b', 'c'],
+      [
+        { cells: ['a', 'b'], total: 3 },
+        { cells: ['b', 'c'], total: 4 },
+      ],
+    ),
+  ).solve();
+  assert.equal(r.stats.solutions, 1);
+  assert.ok(r.solutions.every((s) => s.a + s.b === 3 && s.b + s.c === 4));
+});

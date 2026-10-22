@@ -1,3 +1,15 @@
-import test from 'node:test';import assert from 'node:assert/strict';import {queens} from '../src/index.js';import {solveAsync} from '../src/async.js';
-test('worker solving leaves the event loop responsive',async()=>{let ticked=false;const timer=setTimeout(()=>ticked=true,0);const r=await solveAsync(queens(5));clearTimeout(timer);assert.equal(r.stats.solutions,10);assert.ok(ticked);});
-test('worker errors propagate as rejected promises',async()=>{await assert.rejects(solveAsync(queens(4),{limit:0}),/Invalid search budget/);});
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { queens } from '../src/index.js';
+import { solveAsync } from '../src/async.js';
+test('worker solving leaves the event loop responsive', async () => {
+  let ticked = false;
+  const timer = setTimeout(() => (ticked = true), 0);
+  const r = await solveAsync(queens(5));
+  clearTimeout(timer);
+  assert.equal(r.stats.solutions, 10);
+  assert.ok(ticked);
+});
+test('worker errors propagate as rejected promises', async () => {
+  await assert.rejects(solveAsync(queens(4), { limit: 0 }), /Invalid search budget/);
+});

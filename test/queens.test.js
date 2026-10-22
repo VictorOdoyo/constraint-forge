@@ -12,9 +12,10 @@ test('matches exhaustive N-Queens counts for boards 1 through 8', () => {
     for (const solution of result.solutions) {
       const rows = Object.values(solution);
       assert.equal(new Set(rows).size, n);
-      for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) {
-        assert.notEqual(Math.abs(rows[i] - rows[j]), j - i);
-      }
+      for (let i = 0; i < n; i++)
+        for (let j = i + 1; j < n; j++) {
+          assert.notEqual(Math.abs(rows[i] - rows[j]), j - i);
+        }
     }
   }
 });

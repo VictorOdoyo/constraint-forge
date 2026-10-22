@@ -1,2 +1,10 @@
-import test from 'node:test';import assert from 'node:assert/strict';import {renderSudokuSvg,renderQueensSvg} from '../src/render.js';
-test('SVG renderers produce deterministic bounded puzzle diagrams',()=>{const svg=renderSudokuSvg('123456789'+'.'.repeat(72));assert.equal((svg.match(/<text /g)||[]).length,9);assert.ok(svg.includes('Sudoku puzzle'));assert.equal((renderQueensSvg([1,3,0,2]).match(/<circle/g)||[]).length,4);assert.throws(()=>renderSudokuSvg('.'.repeat(81),{cellSize:NaN}),RangeError);});
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { renderSudokuSvg, renderQueensSvg } from '../src/render.js';
+test('SVG renderers produce deterministic bounded puzzle diagrams', () => {
+  const svg = renderSudokuSvg('123456789' + '.'.repeat(72));
+  assert.equal((svg.match(/<text /g) || []).length, 9);
+  assert.ok(svg.includes('Sudoku puzzle'));
+  assert.equal((renderQueensSvg([1, 3, 0, 2]).match(/<circle/g) || []).length, 4);
+  assert.throws(() => renderSudokuSvg('.'.repeat(81), { cellSize: NaN }), RangeError);
+});

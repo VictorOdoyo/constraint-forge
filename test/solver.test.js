@@ -10,7 +10,7 @@ test('enumerates every permutation and leaves model unchanged', () => {
   const first = solver.solve();
   assert.equal(first.status, 'complete');
   assert.equal(first.solutions.length, 6);
-  assert.equal(new Set(first.solutions.map(v => JSON.stringify(v))).size, 6);
+  assert.equal(new Set(first.solutions.map((v) => JSON.stringify(v))).size, 6);
   assert.deepEqual(solver.solve().solutions, first.solutions);
   assert.deepEqual(m.domains.get('a'), [1, 2, 3]);
 });

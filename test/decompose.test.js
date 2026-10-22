@@ -1,3 +1,11 @@
-import test from 'node:test';import assert from 'node:assert/strict';import {Model,Solver} from '../src/index.js';
-import {solveDecomposed} from '../src/decompose.js';
-test('independent components combine by Cartesian product',()=>{const m=new Model().variable('a',[0,1]).variable('b',[0,1]).variable('c',[3,4]);m.constrain(['a','b'],(a,b)=>a!==b);const r=solveDecomposed(m);assert.equal(r.solutions.length,4);assert.equal(r.components,2);});
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { Model, Solver } from '../src/index.js';
+import { solveDecomposed } from '../src/decompose.js';
+test('independent components combine by Cartesian product', () => {
+  const m = new Model().variable('a', [0, 1]).variable('b', [0, 1]).variable('c', [3, 4]);
+  m.constrain(['a', 'b'], (a, b) => a !== b);
+  const r = solveDecomposed(m);
+  assert.equal(r.solutions.length, 4);
+  assert.equal(r.components, 2);
+});

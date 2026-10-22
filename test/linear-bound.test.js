@@ -1,2 +1,16 @@
-import test from 'node:test';import assert from 'node:assert/strict';import {Model} from '../src/model.js';import {minimizeLinear} from '../src/minimizeLinear.js';
-test('objective lower bounds prune a high-dimensional binary model',()=>{const m=new Model(),weights={};for(let i=0;i<18;i++){m.variable('x'+i,[0,1]);weights['x'+i]=1;}const r=minimizeLinear(m,weights);assert.equal(r.score,0);assert.ok(r.optimal);assert.ok(r.stats.nodes<50);});
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { Model } from '../src/model.js';
+import { minimizeLinear } from '../src/minimizeLinear.js';
+test('objective lower bounds prune a high-dimensional binary model', () => {
+  const m = new Model(),
+    weights = {};
+  for (let i = 0; i < 18; i++) {
+    m.variable('x' + i, [0, 1]);
+    weights['x' + i] = 1;
+  }
+  const r = minimizeLinear(m, weights);
+  assert.equal(r.score, 0);
+  assert.ok(r.optimal);
+  assert.ok(r.stats.nodes < 50);
+});

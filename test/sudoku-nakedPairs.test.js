@@ -1,3 +1,14 @@
-import test from 'node:test';import assert from 'node:assert/strict';
-import {nakedPairs} from '../src/sudoku/nakedPairs.js';
-test('naked pairs remove both values from other cells in their unit',()=>{const d=new Map(Array.from({length:81},(_,i)=>[i,new Set([1,2,3,4,5,6,7,8,9])]));d.set(0,new Set([1,2]));d.set(1,new Set([1,2]));const r=nakedPairs(d);assert.equal(r.candidates.get(2).has(1),false);assert.equal(d.get(2).has(1),true);assert.ok(r.removals.length>0);});
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { nakedPairs } from '../src/sudoku/nakedPairs.js';
+test('naked pairs remove both values from other cells in their unit', () => {
+  const d = new Map(
+    Array.from({ length: 81 }, (_, i) => [i, new Set([1, 2, 3, 4, 5, 6, 7, 8, 9])]),
+  );
+  d.set(0, new Set([1, 2]));
+  d.set(1, new Set([1, 2]));
+  const r = nakedPairs(d);
+  assert.equal(r.candidates.get(2).has(1), false);
+  assert.equal(d.get(2).has(1), true);
+  assert.ok(r.removals.length > 0);
+});
