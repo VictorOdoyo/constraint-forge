@@ -1,4 +1,5 @@
 import { propagate } from './propagate.js';
+import { compile } from './compile.js';
 import { Trail } from './trail.js';
 
 export class SearchInterrupted extends Error {
@@ -19,7 +20,8 @@ export class Solver {
     const constraints = this.model.constraints.map(c => ({ ...c, scope: [...c.scope] }));
     const domains = new Map([...this.model.domains].map(([k, v]) => [k, [...v]]));
     const trail = new Trail(domains);
-    const degree = new Map([...domains.keys()].map(k => [k, constraints.filter(c => c.scope.includes(k)).length]));
+    const topology = compile(domains, constraints);
+    const { degree } = topology;
     const checkpoint = () => {
       if (signal?.aborted) throw new SearchInterrupted('Search aborted');
       if (performance.now() - started >= timeoutMs) throw new SearchInterrupted('Time budget exhausted');
@@ -29,7 +31,7 @@ export class Solver {
       if (stats.nodes >= maxNodes) throw new SearchInterrupted('Node budget exhausted');
       stats.nodes++;
       stats.maxDepth = Math.max(stats.maxDepth, depth);
-      if (!propagate(current, constraints, stats, checkpoint, (k, v) => trail.set(k, v))) { stats.failures++; return; }
+      if (!propagate(current, constraints, stats, checkpoint, (k, v) => trail.set(k, v), topology)) { stats.failures++; return; }
       const candidates = [...current].filter(([, d]) => d.length > 1);
       if (!candidates.length) {
         results.push(Object.fromEntries([...current].map(([k, d]) => [k, d[0]])));
