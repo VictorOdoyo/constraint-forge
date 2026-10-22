@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import * as api from '../src/index.js';
+test('public entry point exposes advanced solver workflows',()=>{for(const key of ['solveAsync','solveBatch','serialize','minimizeLinear','pareto','unsatCore','nonogram','alphametic','sudokuExactCover','difficulty'])assert.equal(typeof api[key],'function',key);});
