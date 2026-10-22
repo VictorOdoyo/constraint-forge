@@ -1,6 +1,7 @@
 import { hasMatching } from './matching.js';
 import { compile } from './compile.js';
 import { regularSupport } from './automaton.js';
+import { linearSupport } from './linear-support.js';
 /** Generalized arc consistency; mutates a branch-local domain map. */
 export function propagate(
   domains,
@@ -14,6 +15,7 @@ export function propagate(
   const queue = constraints.map((_, i) => i);
   const queued = new Set(queue);
   function supported(c, fixed, value) {
+    if (c.kind === 'linearInteger') return linearSupport(c, domains, fixed, value, checkpoint, stats);
     if (c.kind === 'regular') return regularSupport(c, domains, fixed, value, checkpoint, stats);
     if (c.kind === 'allDifferent') {
       stats.checks++;
