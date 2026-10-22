@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {Solver} from '../src/index.js';import {futoshiki} from '../src/puzzles/futoshiki.js';
+test('inequalities select Latin orientations',()=>{const r=new Solver(futoshiki(2,{lessThan:[['0,0','0,1']]})).solve();assert.equal(r.stats.solutions,1);assert.equal(r.solutions[0]['0,0'],1);});
