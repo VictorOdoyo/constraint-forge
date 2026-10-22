@@ -13,7 +13,7 @@ export function cumulative(model, starts, durations, demands, capacity) {
     )
   )
     throw new TypeError('Start domains must be numeric');
-  return model.constrain(
+  model.constrain(
     starts,
     (...s) =>
       s.every(
@@ -25,4 +25,6 @@ export function cumulative(model, starts, durations, demands, capacity) {
       ),
     'cumulative',
   );
+  Object.assign(model.constraints.at(-1), {kind:'cumulative',durations:[...durations],demands:[...demands],capacity});
+  return model;
 }
