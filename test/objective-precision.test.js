@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {Model,minimizeLinear} from '../src/index.js';
+test('linear branch-and-bound refuses unsafe objective bounds',()=>{const m=new Model().variable('x',[Number.MAX_SAFE_INTEGER]);assert.throws(()=>minimizeLinear(m,{x:2}),RangeError);assert.equal(minimizeLinear(m,{x:1}).score,Number.MAX_SAFE_INTEGER);assert.throws(()=>minimizeLinear(new Model().variable('x',[.1]),{x:1}),TypeError);});
