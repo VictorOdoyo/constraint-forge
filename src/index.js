@@ -13,3 +13,5 @@ export { cardinality } from './constraints/cardinality.js';
 export { element } from './constraints/element.js';
 
 export { regular } from './constraints/regular.js';
+
+export { linear } from './constraints/linear.js';
