@@ -1,15 +1,22 @@
 import { Model } from '../model.js';
 import { regular } from '../constraints/regular.js';
 export function lineAutomaton(runs) {
-  if (!Array.isArray(runs) || runs.some(n=>!Number.isSafeInteger(n)||n<1)) throw new TypeError('Invalid nonogram runs');
-  const transitions=[[0,0,0]];
-  let state=0;
-  runs.forEach((run,index)=>{
-    for(let i=0;i<run;i++) { transitions.push([state,1,state+1]);state++; }
-    if(index<runs.length-1) { transitions.push([state,0,state+1]);state++; }
-    transitions.push([state,0,state]);
+  if (!Array.isArray(runs) || runs.some((n) => !Number.isSafeInteger(n) || n < 1))
+    throw new TypeError('Invalid nonogram runs');
+  const transitions = [[0, 0, 0]];
+  let state = 0;
+  runs.forEach((run, index) => {
+    for (let i = 0; i < run; i++) {
+      transitions.push([state, 1, state + 1]);
+      state++;
+    }
+    if (index < runs.length - 1) {
+      transitions.push([state, 0, state + 1]);
+      state++;
+    }
+    transitions.push([state, 0, state]);
   });
-  return {start:0,accept:[state],transitions};
+  return { start: 0, accept: [state], transitions };
 }
 export function linePatterns(length, runs) {
   if (!Number.isInteger(length) || length < 0 || runs.some((n) => !Number.isInteger(n) || n < 1))

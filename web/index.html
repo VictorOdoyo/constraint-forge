@@ -4,63 +4,222 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#18231f" />
-    <meta name="description" content="Solve, generate, and inspect puzzles with Constraint Forge. Everything runs locally in your browser." />
+    <meta
+      name="description"
+      content="Solve, generate, and inspect puzzles with Constraint Forge. Everything runs locally in your browser."
+    />
     <title>Constraint Forge — Puzzle Explorer</title>
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%2318231f'/%3E%3Cpath d='M10 10h20v20H10zM20 10v20M10 20h20' stroke='%23e4ac72' fill='none' stroke-width='2'/%3E%3C/svg%3E" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%2318231f'/%3E%3Cpath d='M10 10h20v20H10zM20 10v20M10 20h20' stroke='%23e4ac72' fill='none' stroke-width='2'/%3E%3C/svg%3E"
+    />
     <link rel="stylesheet" href="/web/styles.css" />
     <script type="module" src="/web/app.js"></script>
   </head>
   <body>
     <a class="skip" href="#workspace">Skip to puzzle</a>
     <aside class="sidebar">
-      <a class="brand" href="/" aria-label="Constraint Forge home"><span class="brand-icon" aria-hidden="true">⊞</span><span>Constraint<br /><strong>Forge</strong></span></a>
+      <a class="brand" href="/" aria-label="Constraint Forge home"
+        ><span class="brand-icon" aria-hidden="true">⊞</span
+        ><span>Constraint<br /><strong>Forge</strong></span></a
+      >
       <p class="sidebar-label">THE WORKBENCH</p>
       <nav aria-label="Puzzle family">
-        <button class="family active" data-mode="sudoku" aria-pressed="true"><span aria-hidden="true">▦</span> Sudoku <small>01</small></button>
-        <button class="family" data-mode="queens" aria-pressed="false"><span aria-hidden="true">♛</span> N-Queens <small>02</small></button>
-        <button class="family" data-mode="nonogram" aria-pressed="false"><span aria-hidden="true">▧</span> Nonogram <small>03</small></button>
+        <button class="family active" data-mode="sudoku" aria-pressed="true">
+          <span aria-hidden="true">▦</span> Sudoku <small>01</small>
+        </button>
+        <button class="family" data-mode="queens" aria-pressed="false">
+          <span aria-hidden="true">♛</span> N-Queens <small>02</small>
+        </button>
+        <button class="family" data-mode="nonogram" aria-pressed="false">
+          <span aria-hidden="true">▧</span> Nonogram <small>03</small>
+        </button>
       </nav>
-      <div class="sidebar-note"><span class="dot"></span> YOUR BROWSER IS THE LAB<p>No uploads. No accounts.<br />Your puzzles stay on this device.</p></div>
-      <a class="source-link" href="https://github.com/VictorOdoyo/constraint-forge" target="_blank" rel="noreferrer">Explore the source <span aria-hidden="true">↗</span></a>
+      <div class="sidebar-note">
+        <span class="dot"></span> YOUR BROWSER IS THE LAB
+        <p>No uploads. No accounts.<br />Your puzzles stay on this device.</p>
+      </div>
+      <a
+        class="source-link"
+        href="https://github.com/VictorOdoyo/constraint-forge"
+        target="_blank"
+        rel="noreferrer"
+        >Explore the source <span aria-hidden="true">↗</span></a
+      >
     </aside>
     <main id="workspace">
-      <header class="page-header"><div><p class="eyebrow">PUZZLE EXPLORER / <span id="family-number">01</span></p><h1>A little logic.<br /><em>A lot of possibility.</em></h1><p class="subtitle">Build a puzzle. Follow the search. Find what fits.</p></div><span class="local-badge"><span class="dot"></span> LOCAL WORKSPACE</span></header>
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">PUZZLE EXPLORER / <span id="family-number">01</span></p>
+          <h1>A little logic.<br /><em>A lot of possibility.</em></h1>
+          <p class="subtitle">Build a puzzle. Follow the search. Find what fits.</p>
+        </div>
+        <span class="local-badge"><span class="dot"></span> LOCAL WORKSPACE</span>
+      </header>
       <div class="workbench">
         <section class="puzzle-card" aria-labelledby="puzzle-title">
-          <div class="card-header"><div><span class="eyebrow">THE PUZZLE</span><h2 id="puzzle-title">Sudoku</h2></div><button id="reset" class="text-button">Load example <span aria-hidden="true">↺</span></button></div>
+          <div class="card-header">
+            <div>
+              <span class="eyebrow">THE PUZZLE</span>
+              <h2 id="puzzle-title">Sudoku</h2>
+            </div>
+            <button id="reset" class="text-button">
+              Load example <span aria-hidden="true">↺</span>
+            </button>
+          </div>
           <div id="board-wrap"><div id="board" class="board" aria-label="Sudoku board"></div></div>
-          <div class="board-footer"><span id="board-caption">Enter digits 1–9. Arrow keys move between cells.</span><button id="clear" class="text-button">Clear grid</button></div>
-          <div class="solution-nav" id="solution-nav" hidden><button id="previous" aria-label="Previous solution">←</button><span id="solution-position"></span><button id="next" aria-label="Next solution">→</button><button id="edit" class="text-button">Back to puzzle</button></div>
+          <div class="board-footer">
+            <span id="board-caption">Enter digits 1–9. Arrow keys move between cells.</span
+            ><button id="clear" class="text-button">Clear grid</button>
+          </div>
+          <div class="solution-nav" id="solution-nav" hidden>
+            <button id="previous" aria-label="Previous solution">←</button
+            ><span id="solution-position"></span
+            ><button id="next" aria-label="Next solution">→</button
+            ><button id="edit" class="text-button">Back to puzzle</button>
+          </div>
         </section>
         <aside class="controls" aria-label="Puzzle controls">
-          <section class="control-card"><p class="eyebrow">MAKE IT YOURS</p>
+          <section class="control-card">
+            <p class="eyebrow">MAKE IT YOURS</p>
             <div id="sudoku-controls" class="mode-controls">
-              <div class="field-row"><label>Seed<input id="seed" type="number" min="0" max="4294967295" value="42" /></label><label>Target clues<input id="clues" type="number" min="17" max="81" value="32" /></label></div>
-              <button id="generate" class="secondary full">Generate a puzzle <span aria-hidden="true">↗</span></button>
-              <div class="small-actions"><button id="hint" class="text-button">Find a hint</button><button id="apply-hint" class="text-button" disabled>Apply hint</button><button id="undo" class="text-button" disabled>Undo</button></div>
-              <details><summary>Paste a puzzle</summary><label class="sr-only" for="puzzle-text">81 Sudoku cells; dots or zeroes are empty</label><textarea id="puzzle-text" rows="3" spellcheck="false" maxlength="1000"></textarea><button id="load-text" class="secondary full">Load 81 cells</button></details>
+              <div class="field-row">
+                <label
+                  >Seed<input id="seed" type="number" min="0" max="4294967295" value="42" /></label
+                ><label
+                  >Target clues<input id="clues" type="number" min="17" max="81" value="32"
+                /></label>
+              </div>
+              <button id="generate" class="secondary full">
+                Generate a puzzle <span aria-hidden="true">↗</span>
+              </button>
+              <div class="small-actions">
+                <button id="hint" class="text-button">Find a hint</button
+                ><button id="apply-hint" class="text-button" disabled>Apply hint</button
+                ><button id="undo" class="text-button" disabled>Undo</button>
+              </div>
+              <details>
+                <summary>Paste a puzzle</summary>
+                <label class="sr-only" for="puzzle-text"
+                  >81 Sudoku cells; dots or zeroes are empty</label
+                ><textarea id="puzzle-text" rows="3" spellcheck="false" maxlength="1000"></textarea
+                ><button id="load-text" class="secondary full">Load 81 cells</button>
+              </details>
             </div>
-            <div id="queens-controls" class="mode-controls" hidden><label>Board size<input id="queen-size" type="number" min="1" max="12" value="8" /></label><label>Maximum solutions<input id="solution-limit" type="number" min="1" max="2000" value="100" /></label><p class="help">Place one queen in every column. No two may share a row or a diagonal.</p></div>
-            <div id="nonogram-controls" class="mode-controls" hidden><div class="field-row"><label>Row clues<textarea id="row-clues" rows="6" spellcheck="false">1
+            <div id="queens-controls" class="mode-controls" hidden>
+              <label
+                >Board size<input id="queen-size" type="number" min="1" max="12" value="8" /></label
+              ><label
+                >Maximum solutions<input
+                  id="solution-limit"
+                  type="number"
+                  min="1"
+                  max="2000"
+                  value="100"
+              /></label>
+              <p class="help">
+                Place one queen in every column. No two may share a row or a diagonal.
+              </p>
+            </div>
+            <div id="nonogram-controls" class="mode-controls" hidden>
+              <div class="field-row">
+                <label
+                  >Row clues<textarea id="row-clues" rows="6" spellcheck="false">
+1
 1
 5
 1
-1</textarea></label><label>Column clues<textarea id="column-clues" rows="6" spellcheck="false">1
+1</textarea
+                  ></label
+                ><label
+                  >Column clues<textarea id="column-clues" rows="6" spellcheck="false">
+1
 1
 5
 1
-1</textarea></label></div><p class="help">One line per row or column. Separate runs with spaces. Use 0 for an empty line.</p><button id="update-clues" class="secondary full">Update board</button></div>
-            <details class="strategy"><summary>Search strategy</summary><label>Choose a variable<select id="variable-order"><option value="mrv">Smallest domain first (MRV)</option><option value="dom-wdeg">Learn from failures (dom-wdeg)</option></select></label><label>Try values in<select id="value-order"><option value="input">Original order</option><option value="lcv">Least-constraining order</option></select></label></details>
-            <button id="solve" class="primary full">Solve & inspect <span aria-hidden="true">→</span></button><button id="stop" class="secondary full" hidden>Stop search</button>
+1</textarea
+                  >
+                </label>
+              </div>
+              <p class="help">
+                One line per row or column. Separate runs with spaces. Use 0 for an empty line.
+              </p>
+              <button id="update-clues" class="secondary full">Update board</button>
+            </div>
+            <details class="strategy">
+              <summary>Search strategy</summary>
+              <label
+                >Choose a variable<select id="variable-order">
+                  <option value="mrv">Smallest domain first (MRV)</option>
+                  <option value="dom-wdeg">Learn from failures (dom-wdeg)</option>
+                </select></label
+              ><label
+                >Try values in<select id="value-order">
+                  <option value="input">Original order</option>
+                  <option value="lcv">Least-constraining order</option>
+                </select></label
+              >
+            </details>
+            <button id="solve" class="primary full">
+              Solve & inspect <span aria-hidden="true">→</span></button
+            ><button id="stop" class="secondary full" hidden>Stop search</button>
             <p id="status" class="status" role="status" aria-live="polite">Ready when you are.</p>
           </section>
-          <section class="metrics-card" aria-label="Search statistics"><div><strong id="stat-solutions">—</strong><span>solutions found</span></div><div><strong id="stat-nodes">—</strong><span>search nodes</span></div><div><strong id="stat-pruned">—</strong><span>values pruned</span></div><div><strong id="stat-time">—</strong><span>solver time</span></div></section>
+          <section class="metrics-card" aria-label="Search statistics">
+            <div><strong id="stat-solutions">—</strong><span>solutions found</span></div>
+            <div><strong id="stat-nodes">—</strong><span>search nodes</span></div>
+            <div><strong id="stat-pruned">—</strong><span>values pruned</span></div>
+            <div><strong id="stat-time">—</strong><span>solver time</span></div>
+          </section>
         </aside>
       </div>
-      <section class="inspection" aria-labelledby="inspection-title"><div class="inspection-header"><div><p class="eyebrow">UNDER THE SURFACE</p><h2 id="inspection-title">Every decision leaves a trace.</h2></div><div class="exports"><button id="export-json" class="secondary" disabled>Export JSON ↓</button><button id="export-svg" class="secondary">Export SVG ↓</button></div></div>
-        <div class="inspection-body"><div class="trace-column"><div id="trace-chart" aria-label="Search depth chart"></div><label for="trace-position">Explore the search <span id="trace-count">No search yet</span></label><input id="trace-position" type="range" min="0" max="0" value="0" disabled /><p id="trace-detail" class="help">Run a solver to explore its decisions, failures, and discoveries.</p></div><div class="model-column"><span class="eyebrow">MODEL SNAPSHOT</span><dl><div><dt>Variables</dt><dd id="model-variables">81</dd></div><div><dt>Constraints</dt><dd id="model-constraints">27</dd></div><div><dt>Largest scope</dt><dd id="model-arity">9</dd></div></dl><p class="help" id="proof-note">An exhausted search can prove uniqueness. A solution cap or timeout cannot.</p></div></div>
+      <section class="inspection" aria-labelledby="inspection-title">
+        <div class="inspection-header">
+          <div>
+            <p class="eyebrow">UNDER THE SURFACE</p>
+            <h2 id="inspection-title">Every decision leaves a trace.</h2>
+          </div>
+          <div class="exports">
+            <button id="export-json" class="secondary" disabled>Export JSON ↓</button
+            ><button id="export-svg" class="secondary">Export SVG ↓</button>
+          </div>
+        </div>
+        <div class="inspection-body">
+          <div class="trace-column">
+            <div id="trace-chart" aria-label="Search depth chart"></div>
+            <label for="trace-position"
+              >Explore the search <span id="trace-count">No search yet</span></label
+            ><input id="trace-position" type="range" min="0" max="0" value="0" disabled />
+            <p id="trace-detail" class="help">
+              Run a solver to explore its decisions, failures, and discoveries.
+            </p>
+          </div>
+          <div class="model-column">
+            <span class="eyebrow">MODEL SNAPSHOT</span>
+            <dl>
+              <div>
+                <dt>Variables</dt>
+                <dd id="model-variables">81</dd>
+              </div>
+              <div>
+                <dt>Constraints</dt>
+                <dd id="model-constraints">27</dd>
+              </div>
+              <div>
+                <dt>Largest scope</dt>
+                <dd id="model-arity">9</dd>
+              </div>
+            </dl>
+            <p class="help" id="proof-note">
+              An exhausted search can prove uniqueness. A solution cap or timeout cannot.
+            </p>
+          </div>
+        </div>
       </section>
-      <footer class="page-footer"><span>Constraint Forge · finite domains, open possibilities.</span><span>Built to be inspected.</span></footer>
+      <footer class="page-footer">
+        <span>Constraint Forge · finite domains, open possibilities.</span
+        ><span>Built to be inspected.</span>
+      </footer>
     </main>
   </body>
 </html>

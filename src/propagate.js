@@ -16,8 +16,10 @@ export function propagate(
   const queue = constraints.map((_, i) => i);
   const queued = new Set(queue);
   function supported(c, fixed, value) {
-    if (c.kind === 'cumulative') return timetableSupport(c,domains,fixed,value,checkpoint,stats);
-    if (c.kind === 'linearInteger') return linearSupport(c, domains, fixed, value, checkpoint, stats);
+    if (c.kind === 'cumulative')
+      return timetableSupport(c, domains, fixed, value, checkpoint, stats);
+    if (c.kind === 'linearInteger')
+      return linearSupport(c, domains, fixed, value, checkpoint, stats);
     if (c.kind === 'regular') return regularSupport(c, domains, fixed, value, checkpoint, stats);
     if (c.kind === 'allDifferent') {
       stats.checks++;

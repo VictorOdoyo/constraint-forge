@@ -1,1 +1,10 @@
-:root{--forest:#243b2d;--paper:#f5f4ed;--white:#fffefa;--ink:#27352c;--muted:#728071;--line:#e2e5da;--sand:#e1b584;--accent:#cd8b45}
+:root {
+  --forest: #243b2d;
+  --paper: #f5f4ed;
+  --white: #fffefa;
+  --ink: #27352c;
+  --muted: #728071;
+  --line: #e2e5da;
+  --sand: #e1b584;
+  --accent: #cd8b45;
+}
