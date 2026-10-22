@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {Solver} from '../src/index.js';import {packing} from '../src/puzzles/packing.js';
+test('bin capacities exclude overloaded assignments',()=>{const r=new Solver(packing([2,2,1],[3,2])).solve();assert.equal(r.stats.solutions,2);});
