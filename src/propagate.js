@@ -24,6 +24,14 @@ export function propagate(domains, constraints, stats, checkpoint = () => {}, se
     let byValue=cache.get(fixed);if(!byValue){byValue=new Map();cache.set(fixed,byValue);}
     const previous=byValue.get(value);
     if(previous&&c.scope.every((k,i)=>domains.get(k).includes(previous[i]))) { checkpoint();stats.cacheHits=(stats.cacheHits||0)+1;return true; }
+    if (c.kind === 'linearBound') {
+      let lower=0;
+      for(let i=0;i<c.scope.length;i++){
+        checkpoint(); const k=c.scope[i],weight=c.coefficients[i];
+        lower+=k===fixed?value*weight:Math.min(...domains.get(k).map(v=>v*weight));
+      }
+      stats.checks++;return lower<c.bound();
+    }
     const tuple = [];
     function visit(i) {
       checkpoint();
