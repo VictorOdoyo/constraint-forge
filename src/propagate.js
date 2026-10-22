@@ -11,13 +11,13 @@ export function propagate(domains, constraints, stats, checkpoint = () => {}, se
       return c.tuples.some(row => { checkpoint(); stats.checks++; return c.scope.every((k,i)=>k===fixed ? row[i]===value : domains.get(k).includes(row[i])); });
     }
     if (c.kind === 'sum') {
-      let reachable = new Set([0]);
+      let reachable = new Set([0n]);
       for (const k of c.scope) {
         const next = new Set();
-        for (const total of reachable) for (const v of k===fixed ? [value] : domains.get(k)) { checkpoint(); stats.checks++; next.add(total+v); }
+        for (const total of reachable) for (const v of k===fixed ? [value] : domains.get(k)) { checkpoint(); stats.checks++; next.add(total+BigInt(v)); }
         reachable = next;
       }
-      return reachable.has(c.target);
+      return reachable.has(BigInt(c.target));
     }
     let cache = topology.residues.get(c);
     if(!cache){cache=new Map();topology.residues.set(c,cache);}
