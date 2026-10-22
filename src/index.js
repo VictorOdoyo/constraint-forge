@@ -5,3 +5,5 @@ export { sudoku, parseSudoku, formatSudoku, sudokuUniqueness } from './puzzles/s
 export { generateSudoku } from './puzzles/generate.js';
 
 export { table } from './constraints/table.js';
+
+export { sum } from './constraints/sum.js';
