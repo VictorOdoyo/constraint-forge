@@ -29,3 +29,5 @@ export { increasing } from './constraints/increasing.js';
 export { product } from './constraints/product.js';
 
 export { modulo } from './constraints/modulo.js';
+
+export { absolute } from './constraints/absolute.js';
