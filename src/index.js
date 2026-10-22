@@ -19,3 +19,5 @@ export { linear } from './constraints/linear.js';
 export { reify } from './constraints/reify.js';
 
 export { implies } from './constraints/implies.js';
+
+export { nogood } from './constraints/nogood.js';
