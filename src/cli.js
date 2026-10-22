@@ -10,7 +10,9 @@ try {
   if (command === '--help' && !args.length) {
     console.log(usage);
   } else {
-    if (['inspect','core'].includes(command) && args.length === 1) {
+    if (['sudoku-exact','hints','difficulty'].includes(command) && args.length === 1) {
+      result=command==='hints'?singles(args[0]):command==='difficulty'?difficulty(args[0]):sudokuExactCover(args[0],{limit:2,maxNodes:100000});
+    } else if (['inspect','core'].includes(command) && args.length === 1) {
       const model=deserialize(JSON.parse(readFileSync(args[0],'utf8')));
       result=command==='inspect'?inspect(model):unsatCore(model,{timeoutMs:10000});
     } else if (command === 'solve-model' && args.length === 1) {
