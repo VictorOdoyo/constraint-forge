@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {transformSudoku} from '../src/sudoku/transform.js';
+test('transpose is involutive and digit permutations preserve blanks',()=>{const p='123456789'+'.'.repeat(72);assert.equal(transformSudoku(transformSudoku(p,{transpose:true}),{transpose:true}),p);assert.equal(transformSudoku(p,{digits:[9,8,7,6,5,4,3,2,1]}).slice(0,9),'987654321');assert.throws(()=>transformSudoku(p,{rows:[0,3,2,1,4,5,6,7,8]}),/preserve/);});
