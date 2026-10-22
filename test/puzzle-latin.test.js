@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {Solver} from '../src/index.js';import {latin} from '../src/puzzles/latin.js';
+test('Latin squares have known order-three enumeration count',()=>{assert.equal(new Solver(latin(3)).solve().stats.solutions,12);assert.equal(new Solver(latin(3,{'0,0':1})).solve().stats.solutions,4);});
