@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {Model,Solver} from '../src/index.js';
+test('trace exposes immutable decisions and solution counters',()=>{const events=[];new Solver(new Model().variable('x',[1,2])).solve({onTrace:e=>events.push(e)});assert.deepEqual(events.filter(e=>e.type==='decision').map(e=>e.value),[1,2]);assert.equal(events.filter(e=>e.type==='solution').length,2);assert.ok(events.every(Object.isFrozen));});

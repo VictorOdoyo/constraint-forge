@@ -10,13 +10,14 @@ export class SearchInterrupted extends Error {
 export class Solver {
   constructor(model) { this.model = model; }
 
-  solve({ limit = Infinity, maxNodes = Infinity, timeoutMs = Infinity, signal, onSolution, collect = true, valueOrder = 'input', variableOrder = 'mrv' } = {}) {
+  solve({ limit = Infinity, maxNodes = Infinity, timeoutMs = Infinity, signal, onSolution, collect = true, valueOrder = 'input', variableOrder = 'mrv', onTrace } = {}) {
     if (!(limit === Infinity || Number.isSafeInteger(limit) && limit >= 1) ||
         !(maxNodes === Infinity || Number.isSafeInteger(maxNodes) && maxNodes >= 1) ||
         !(timeoutMs >= 0)) throw new RangeError('Invalid search budget');
     if (onSolution !== undefined && typeof onSolution !== 'function') throw new TypeError('onSolution must be a function');
     if (!['mrv','dom-wdeg'].includes(variableOrder)) throw new RangeError('Unknown variable ordering');
     if (!['input','lcv'].includes(valueOrder)) throw new RangeError('Unknown value ordering');
+    if (onTrace !== undefined && typeof onTrace !== 'function') throw new TypeError('onTrace must be a function');
     const started = performance.now();
     const stats = { nodes: 0, checks: 0, pruned: 0, failures: 0, solutions: 0, maxDepth: 0, elapsedMs: 0 };
     const results = [];
@@ -29,17 +30,20 @@ export class Solver {
       if (signal?.aborted) throw new SearchInterrupted('Search aborted');
       if (performance.now() - started >= timeoutMs) throw new SearchInterrupted('Time budget exhausted');
     };
+    const emit = event => onTrace?.(Object.freeze(event));
     function search(current, depth) {
       checkpoint();
       if (stats.nodes >= maxNodes) throw new SearchInterrupted('Node budget exhausted');
       stats.nodes++;
+      emit({type:'node',depth,node:stats.nodes});
       stats.maxDepth = Math.max(stats.maxDepth, depth);
-      if (!propagate(current, constraints, stats, checkpoint, (k, v) => trail.set(k, v), topology)) { stats.failures++; return; }
+      if (!propagate(current, constraints, stats, checkpoint, (k, v) => trail.set(k, v), topology)) { stats.failures++; emit({type:'failure',depth}); return; }
       const candidates = [...current].filter(([, d]) => d.length > 1);
       if (!candidates.length) {
         const solution = Object.fromEntries([...current].map(([k, d]) => [k, d[0]]));
         if (collect) results.push(solution);
         stats.solutions++;
+        emit({type:'solution',depth,index:stats.solutions});
         onSolution?.({ ...solution });
         return;
       }
@@ -60,6 +64,7 @@ export class Solver {
         return rejected;
       }
       for (const value of ordered) {
+        emit({type:'decision',depth,variable:key,value});
         const mark = trail.mark();
         try { trail.set(key, [value]); search(current, depth + 1); }
         finally { trail.undo(mark); }
