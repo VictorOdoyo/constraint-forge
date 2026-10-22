@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+import { readFileSync } from 'node:fs';
+import { deserialize, inspect, unsatCore, solveAsync, sudokuExactCover, singles, difficulty } from './index.js';
 import { Solver, queens, sudokuUniqueness, formatSudoku, generateSudoku } from './index.js';
 
 const usage = 'Usage: constraint-forge queens <1..30> | sudoku <81 cells> | generate <seed> <17..81 clues>';
@@ -8,7 +10,9 @@ try {
   if (command === '--help' && !args.length) {
     console.log(usage);
   } else {
-    if (command === 'queens' && args.length === 1) {
+    if (command === 'solve-model' && args.length === 1) {
+      result = new Solver(deserialize(JSON.parse(readFileSync(args[0],'utf8')))).solve({limit:1000,timeoutMs:10000});
+    } else if (command === 'queens' && args.length === 1) {
       result = new Solver(queens(Number(args[0]))).solve({ limit: 1000, timeoutMs: 10000 });
     } else if (command === 'sudoku' && args.length === 1) {
       result = sudokuUniqueness(args[0], { timeoutMs: 10000 });
