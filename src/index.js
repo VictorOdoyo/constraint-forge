@@ -21,3 +21,5 @@ export { reify } from './constraints/reify.js';
 export { implies } from './constraints/implies.js';
 
 export { nogood } from './constraints/nogood.js';
+
+export { lexLess } from './constraints/lexLess.js';
