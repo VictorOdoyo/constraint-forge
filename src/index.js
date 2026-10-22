@@ -84,3 +84,5 @@ export { nonogram } from './puzzles/nonogram.js';
 export { alphametic } from './puzzles/alphametic.js';
 export { packing } from './puzzles/packing.js';
 export { scheduling } from './puzzles/scheduling.js';
+
+export { renderSudokuSvg, renderQueensSvg } from './render.js';
