@@ -25,3 +25,5 @@ export { nogood } from './constraints/nogood.js';
 export { lexLess } from './constraints/lexLess.js';
 
 export { increasing } from './constraints/increasing.js';
+
+export { product } from './constraints/product.js';
