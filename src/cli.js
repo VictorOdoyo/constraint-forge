@@ -3,14 +3,16 @@ import { readFileSync } from 'node:fs';
 import { deserialize, inspect, unsatCore, solveAsync, sudokuExactCover, singles, difficulty } from './index.js';
 import { Solver, queens, sudokuUniqueness, formatSudoku, generateSudoku } from './index.js';
 
-const usage = 'Usage: constraint-forge queens <1..30> | sudoku <81 cells> | generate <seed> <17..81 clues>';
+const usage = 'Usage: constraint-forge queens <1..30> | sudoku|sudoku-exact|hints|difficulty <81 cells> | generate <seed> <17..81 clues> | solve-model|solve-async|inspect|core <model.json>';
 try {
   const [command, ...args] = process.argv.slice(2);
   let result;
   if (command === '--help' && !args.length) {
     console.log(usage);
   } else {
-    if (['sudoku-exact','hints','difficulty'].includes(command) && args.length === 1) {
+    if (command==='solve-async' && args.length===1) {
+      result=await solveAsync(deserialize(JSON.parse(readFileSync(args[0],'utf8'))),{limit:1000,wallTimeoutMs:10000});
+    } else if (['sudoku-exact','hints','difficulty'].includes(command) && args.length === 1) {
       result=command==='hints'?singles(args[0]):command==='difficulty'?difficulty(args[0]):sudokuExactCover(args[0],{limit:2,maxNodes:100000});
     } else if (['inspect','core'].includes(command) && args.length === 1) {
       const model=deserialize(JSON.parse(readFileSync(args[0],'utf8')));
