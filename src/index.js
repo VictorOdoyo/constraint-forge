@@ -41,3 +41,5 @@ export { countValue } from './constraints/countValue.js';
 export { among } from './constraints/among.js';
 
 export { cumulative } from './constraints/cumulative.js';
+
+export { noOverlap } from './constraints/noOverlap.js';
