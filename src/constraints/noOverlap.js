@@ -1,5 +1,6 @@
 import { requireNumeric } from '../numeric.js';
 export function noOverlap(model, starts, durations) {
+  durations=[...durations];
   requireNumeric(model, starts);
   if (starts.length !== durations.length || durations.some((v) => !Number.isFinite(v) || v < 0))
     throw new TypeError('Invalid durations');

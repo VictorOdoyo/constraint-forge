@@ -13,6 +13,7 @@ export function cumulative(model, starts, durations, demands, capacity) {
     )
   )
     throw new TypeError('Start domains must be numeric');
+  durations=[...durations];demands=[...demands];
   model.constrain(
     starts,
     (...s) =>

@@ -57,7 +57,10 @@ export function deserialize(data) {
     else if (c.kind === 'sum') sum(model, c.scope, c.target);
     else if (c.kind === 'table') table(model, c.scope, c.tuples);
     else if (c.kind === 'regular') regular(model,c.scope,c);
-    else if (c.kind === 'linearInteger') linear(model,c.scope,c.coefficients,c.relation,c.rhs);
+    else if (c.kind === 'linearInteger') {
+      linear(model,c.scope,c.coefficients,c.relation,c.rhs);
+      if(model.constraints.at(-1).kind!=='linearInteger')throw new TypeError('Integer relation exceeds exact representability');
+    }
     else if (c.kind === 'cumulative') cumulative(model,c.scope,c.durations,c.demands,c.capacity);
     else throw new TypeError('Unsupported constraint kind');
   }
