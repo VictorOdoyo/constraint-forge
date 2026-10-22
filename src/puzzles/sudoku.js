@@ -17,11 +17,11 @@ export function sudoku(input) {
     m.variable(key(r, c), cells[r * 9 + c] ? [cells[r * 9 + c]] : digits);
   }
   for (let i = 0; i < 9; i++) {
-    m.allDifferent(Array.from({ length: 9 }, (_, j) => key(i, j)));
-    m.allDifferent(Array.from({ length: 9 }, (_, j) => key(j, i)));
+    m.allDifferent(Array.from({ length: 9 }, (_, j) => key(i, j)), { global: true });
+    m.allDifferent(Array.from({ length: 9 }, (_, j) => key(j, i)), { global: true });
   }
   for (let br = 0; br < 3; br++) for (let bc = 0; bc < 3; bc++) {
-    m.allDifferent(Array.from({ length: 9 }, (_, j) => key(br * 3 + Math.floor(j / 3), bc * 3 + j % 3)));
+    m.allDifferent(Array.from({ length: 9 }, (_, j) => key(br * 3 + Math.floor(j / 3), bc * 3 + j % 3)), { global: true });
   }
   return m;
 }
