@@ -1,3 +1,4 @@
+import { hasMatching } from './matching.js';
 import { compile } from './compile.js';
 /** Generalized arc consistency; mutates a branch-local domain map. */
 export function propagate(domains, constraints, stats, checkpoint = () => {}, setDomain = (k, v) => domains.set(k, v), topology = compile(domains, constraints)) {
@@ -5,6 +6,7 @@ export function propagate(domains, constraints, stats, checkpoint = () => {}, se
   const queue = constraints.map((_, i) => i);
   const queued = new Set(queue);
   function supported(c, fixed, value) {
+    if (c.kind === 'allDifferent') { stats.checks++; return hasMatching(c.scope, domains, fixed, value, checkpoint); }
     const tuple = [];
     function visit(i) {
       checkpoint();

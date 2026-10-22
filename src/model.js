@@ -25,9 +25,13 @@ export class Model {
     return this;
   }
 
-  allDifferent(scope) {
+  allDifferent(scope, { global = false } = {}) {
     if (!Array.isArray(scope) || new Set(scope).size !== scope.length || scope.some(k => !this.domains.has(k))) {
       throw new TypeError('allDifferent requires distinct known variables');
+    }
+    if (global && scope.length) {
+      this.constraints.push({ scope: [...scope], kind: 'allDifferent', label: 'all-different', test: (...v) => new Set(v).size === v.length });
+      return this;
     }
     for (let i = 0; i < scope.length; i++) {
       for (let j = i + 1; j < scope.length; j++) {
