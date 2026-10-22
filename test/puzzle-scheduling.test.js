@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {Solver} from '../src/index.js';import {scheduling} from '../src/puzzles/scheduling.js';
+test('machine exclusion and precedence produce a feasible schedule',()=>{const r=new Solver(scheduling([{name:'a',duration:2,machine:0},{name:'b',duration:1,machine:0}],{horizon:3,precedences:[['a','b']]})).solve();assert.deepEqual(r.solutions,[{a:0,b:2}]);});
