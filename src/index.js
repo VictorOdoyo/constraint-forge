@@ -39,3 +39,5 @@ export { circuit } from './constraints/circuit.js';
 export { countValue } from './constraints/countValue.js';
 
 export { among } from './constraints/among.js';
+
+export { cumulative } from './constraints/cumulative.js';
