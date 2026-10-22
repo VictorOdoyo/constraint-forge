@@ -7,6 +7,9 @@ export function propagate(domains, constraints, stats, checkpoint = () => {}, se
   const queued = new Set(queue);
   function supported(c, fixed, value) {
     if (c.kind === 'allDifferent') { stats.checks++; return hasMatching(c.scope, domains, fixed, value, checkpoint); }
+    if (c.kind === 'table') {
+      return c.tuples.some(row => { checkpoint(); stats.checks++; return c.scope.every((k,i)=>k===fixed ? row[i]===value : domains.get(k).includes(row[i])); });
+    }
     const tuple = [];
     function visit(i) {
       checkpoint();
