@@ -10,10 +10,11 @@ export class SearchInterrupted extends Error {
 export class Solver {
   constructor(model) { this.model = model; }
 
-  solve({ limit = Infinity, maxNodes = Infinity, timeoutMs = Infinity, signal } = {}) {
+  solve({ limit = Infinity, maxNodes = Infinity, timeoutMs = Infinity, signal, onSolution } = {}) {
     if (!(limit === Infinity || Number.isSafeInteger(limit) && limit >= 1) ||
         !(maxNodes === Infinity || Number.isSafeInteger(maxNodes) && maxNodes >= 1) ||
         !(timeoutMs >= 0)) throw new RangeError('Invalid search budget');
+    if (onSolution !== undefined && typeof onSolution !== 'function') throw new TypeError('onSolution must be a function');
     const started = performance.now();
     const stats = { nodes: 0, checks: 0, pruned: 0, failures: 0, solutions: 0, maxDepth: 0, elapsedMs: 0 };
     const results = [];
@@ -36,6 +37,7 @@ export class Solver {
       if (!candidates.length) {
         results.push(Object.fromEntries([...current].map(([k, d]) => [k, d[0]])));
         stats.solutions++;
+        onSolution?.({ ...results[results.length - 1] });
         return;
       }
       candidates.sort((a, b) => a[1].length - b[1].length || degree.get(b[0]) - degree.get(a[0]));
