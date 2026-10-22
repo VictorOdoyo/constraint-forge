@@ -9,3 +9,5 @@ export { table } from './constraints/table.js';
 export { sum } from './constraints/sum.js';
 
 export { cardinality } from './constraints/cardinality.js';
+
+export { element } from './constraints/element.js';
