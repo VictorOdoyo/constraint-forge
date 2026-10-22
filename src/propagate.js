@@ -44,7 +44,7 @@ export function propagate(domains, constraints, stats, checkpoint = () => {}, se
       const before = domains.get(key);
       const after = before.filter(v => supported(c, key, v));
       stats.pruned += before.length - after.length;
-      if (!after.length) return false;
+      if (!after.length) { topology.weights[index]++; return false; }
       if (after.length !== before.length) {
         setDomain(key, after);
         for (const other of incident.get(key)) {

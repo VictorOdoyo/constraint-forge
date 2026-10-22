@@ -10,11 +10,12 @@ export class SearchInterrupted extends Error {
 export class Solver {
   constructor(model) { this.model = model; }
 
-  solve({ limit = Infinity, maxNodes = Infinity, timeoutMs = Infinity, signal, onSolution, collect = true, valueOrder = 'input' } = {}) {
+  solve({ limit = Infinity, maxNodes = Infinity, timeoutMs = Infinity, signal, onSolution, collect = true, valueOrder = 'input', variableOrder = 'mrv' } = {}) {
     if (!(limit === Infinity || Number.isSafeInteger(limit) && limit >= 1) ||
         !(maxNodes === Infinity || Number.isSafeInteger(maxNodes) && maxNodes >= 1) ||
         !(timeoutMs >= 0)) throw new RangeError('Invalid search budget');
     if (onSolution !== undefined && typeof onSolution !== 'function') throw new TypeError('onSolution must be a function');
+    if (!['mrv','dom-wdeg'].includes(variableOrder)) throw new RangeError('Unknown variable ordering');
     if (!['input','lcv'].includes(valueOrder)) throw new RangeError('Unknown value ordering');
     const started = performance.now();
     const stats = { nodes: 0, checks: 0, pruned: 0, failures: 0, solutions: 0, maxDepth: 0, elapsedMs: 0 };
@@ -42,7 +43,8 @@ export class Solver {
         onSolution?.({ ...solution });
         return;
       }
-      candidates.sort((a, b) => a[1].length - b[1].length || degree.get(b[0]) - degree.get(a[0]));
+      const score = ([key,values]) => values.length / (variableOrder==='dom-wdeg' ? Math.max(1,topology.incident.get(key).reduce((s,i)=>s+topology.weights[i],0)) : 1);
+      candidates.sort((a,b)=>score(a)-score(b)||degree.get(b[0])-degree.get(a[0]));
       const [key, values] = candidates[0];
       const ordered = valueOrder === 'input' ? values : [...values].sort((a,b)=>penalty(a)-penalty(b));
       function penalty(value) {
