@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {Solver} from '../src/index.js';import {skyscrapers} from '../src/puzzles/skyscrapers.js';
+test('visibility clues constrain line-of-sight counts',()=>{const r=new Solver(skyscrapers(3,{left:[3,2,1],top:[3,2,1]})).solve();assert.equal(r.stats.solutions,1);assert.equal(r.solutions[0]['0,2'],3);});
