@@ -1,5 +1,5 @@
 /** Generalized arc consistency; mutates a branch-local domain map. */
-export function propagate(domains, constraints, stats, checkpoint = () => {}) {
+export function propagate(domains, constraints, stats, checkpoint = () => {}, setDomain = (k, v) => domains.set(k, v)) {
   const incident = new Map([...domains.keys()].map(k => [k, []]));
   constraints.forEach((c, i) => c.scope.forEach(k => incident.get(k).push(i)));
   const queue = constraints.map((_, i) => i);
@@ -32,7 +32,7 @@ export function propagate(domains, constraints, stats, checkpoint = () => {}) {
       stats.pruned += before.length - after.length;
       if (!after.length) return false;
       if (after.length !== before.length) {
-        domains.set(key, after);
+        setDomain(key, after);
         for (const other of incident.get(key)) {
           if (!queued.has(other)) { queue.push(other); queued.add(other); }
         }

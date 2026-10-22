@@ -1,4 +1,5 @@
 import { propagate } from './propagate.js';
+import { Trail } from './trail.js';
 
 export class SearchInterrupted extends Error {
   constructor(reason) { super(reason); this.name = 'SearchInterrupted'; }
@@ -17,6 +18,7 @@ export class Solver {
     const results = [];
     const constraints = this.model.constraints.map(c => ({ ...c, scope: [...c.scope] }));
     const domains = new Map([...this.model.domains].map(([k, v]) => [k, [...v]]));
+    const trail = new Trail(domains);
     const degree = new Map([...domains.keys()].map(k => [k, constraints.filter(c => c.scope.includes(k)).length]));
     const checkpoint = () => {
       if (signal?.aborted) throw new SearchInterrupted('Search aborted');
@@ -27,7 +29,7 @@ export class Solver {
       if (stats.nodes >= maxNodes) throw new SearchInterrupted('Node budget exhausted');
       stats.nodes++;
       stats.maxDepth = Math.max(stats.maxDepth, depth);
-      if (!propagate(current, constraints, stats, checkpoint)) { stats.failures++; return; }
+      if (!propagate(current, constraints, stats, checkpoint, (k, v) => trail.set(k, v))) { stats.failures++; return; }
       const candidates = [...current].filter(([, d]) => d.length > 1);
       if (!candidates.length) {
         results.push(Object.fromEntries([...current].map(([k, d]) => [k, d[0]])));
@@ -37,9 +39,9 @@ export class Solver {
       candidates.sort((a, b) => a[1].length - b[1].length || degree.get(b[0]) - degree.get(a[0]));
       const [key, values] = candidates[0];
       for (const value of values) {
-        const next = new Map(current);
-        next.set(key, [value]);
-        search(next, depth + 1);
+        const mark = trail.mark();
+        try { trail.set(key, [value]); search(current, depth + 1); }
+        finally { trail.undo(mark); }
         if (results.length >= limit) return;
       }
     }
