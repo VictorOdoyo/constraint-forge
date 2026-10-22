@@ -43,3 +43,5 @@ export { among } from './constraints/among.js';
 export { cumulative } from './constraints/cumulative.js';
 
 export { noOverlap } from './constraints/noOverlap.js';
+
+export { precedence } from './constraints/precedence.js';
