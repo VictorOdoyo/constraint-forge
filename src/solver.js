@@ -10,11 +10,12 @@ export class SearchInterrupted extends Error {
 export class Solver {
   constructor(model) { this.model = model; }
 
-  solve({ limit = Infinity, maxNodes = Infinity, timeoutMs = Infinity, signal, onSolution, collect = true } = {}) {
+  solve({ limit = Infinity, maxNodes = Infinity, timeoutMs = Infinity, signal, onSolution, collect = true, valueOrder = 'input' } = {}) {
     if (!(limit === Infinity || Number.isSafeInteger(limit) && limit >= 1) ||
         !(maxNodes === Infinity || Number.isSafeInteger(maxNodes) && maxNodes >= 1) ||
         !(timeoutMs >= 0)) throw new RangeError('Invalid search budget');
     if (onSolution !== undefined && typeof onSolution !== 'function') throw new TypeError('onSolution must be a function');
+    if (!['input','lcv'].includes(valueOrder)) throw new RangeError('Unknown value ordering');
     const started = performance.now();
     const stats = { nodes: 0, checks: 0, pruned: 0, failures: 0, solutions: 0, maxDepth: 0, elapsedMs: 0 };
     const results = [];
@@ -43,7 +44,20 @@ export class Solver {
       }
       candidates.sort((a, b) => a[1].length - b[1].length || degree.get(b[0]) - degree.get(a[0]));
       const [key, values] = candidates[0];
-      for (const value of values) {
+      const ordered = valueOrder === 'input' ? values : [...values].sort((a,b)=>penalty(a)-penalty(b));
+      function penalty(value) {
+        let rejected=0;
+        for (const i of topology.incident.get(key)) {
+          const c=constraints[i]; if(c.scope.length!==2)continue;
+          const other=c.scope.find(k=>k!==key);
+          for(const v of current.get(other)) {
+            checkpoint(); stats.checks++;
+            if(!c.test(...c.scope.map(k=>k===key?value:v)))rejected++;
+          }
+        }
+        return rejected;
+      }
+      for (const value of ordered) {
         const mark = trail.mark();
         try { trail.set(key, [value]); search(current, depth + 1); }
         finally { trail.undo(mark); }
