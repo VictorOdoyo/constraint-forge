@@ -37,3 +37,5 @@ export { inverse } from './constraints/inverse.js';
 export { circuit } from './constraints/circuit.js';
 
 export { countValue } from './constraints/countValue.js';
+
+export { among } from './constraints/among.js';
