@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {minimizeSudoku} from '../src/sudoku/minimize.js';
+test('budgeted minimization retains uniqueness without claiming minimality',()=>{const p='534678912672195348198342567859761423426853791713924856961537284287419635345286179';const r=minimizeSudoku(p,{maxChecks:2});assert.equal(r.checks,2);assert.equal(r.minimal,false);assert.equal([...r.puzzle].filter(c=>c==='.').length,2);});
