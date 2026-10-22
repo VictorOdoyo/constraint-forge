@@ -1,6 +1,6 @@
 import { Worker } from 'node:worker_threads';
 import { serialize } from './serialize.js';
-export function solveAsync(model,{signal,wallTimeoutMs=Infinity,...options}={}) {
+export async function solveAsync(model,{signal,wallTimeoutMs=Infinity,...options}={}) {
  if(!(wallTimeoutMs===Infinity||Number.isFinite(wallTimeoutMs)&&wallTimeoutMs>=0))return Promise.reject(new RangeError('Invalid wall timeout'));
  if(options.onTrace||options.onSolution)return Promise.reject(new TypeError('Worker callbacks are not transferable'));
  if(signal?.aborted)return Promise.reject(new Error('Search aborted'));
