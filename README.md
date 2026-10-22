@@ -1,79 +1,71 @@
 # Constraint Forge
 
-A dependency-free constraint programming toolkit for solving, generating, and
-studying puzzles. Requires Node.js 22 or later.
+[![verify](https://github.com/VictorOdoyo/constraint-forge/actions/workflows/ci.yml/badge.svg)](https://github.com/VictorOdoyo/constraint-forge/actions/workflows/ci.yml)
 
-## Run
+A constraint programming and puzzle research toolkit with no runtime dependencies.
+Requires Node.js 22 or later. MIT licensed.
+
+## Quick start
 
 ```sh
 git clone https://github.com/VictorOdoyo/constraint-forge.git
 cd constraint-forge
 npm test
 node src/cli.js queens 8
-node src/cli.js sudoku 530070000600195000098000060800060003400803001700020006060000280000419005000080079
 node src/cli.js generate 42 32
 npm run bench
+node bench/compare.js 3
 ```
 
-No dependency installation is required. CLI output is JSON. Exit code 1 means
-invalid input; 2 means an interrupted solve. Queens enumeration has a 1,000
-solution cap and a ten-second time budget. Sudoku solving has a ten-second budget.
+Running the solver and tests needs no dependency installation. Install development
+tools with npm ci when changing code or running the formatter.
 
-## Model your own problem
+## Capabilities
+
+- Reversible domain trails, compiled topology, support residues, MRV, dom-wdeg,
+  and least-constraining value ordering.
+- Global allDifferent using bipartite matching, table filtering, and exact
+  integer sum propagation, plus arithmetic, logical, and scheduling builders.
+- Count-only enumeration, search traces, validation, unsatisfiable cores,
+  topology inspection, and independent component solving.
+- Incumbent, lexicographic, Pareto, and linear branch-and-bound optimization.
+- Worker threads, live cancellation, hard worker wall budgets, bounded batches,
+  and portable models that contain data rather than executable predicates.
+- Sudoku and N-Queens plus Nonograms, KenKen, Kakuro, Futoshiki, Latin squares,
+  magic squares, alphametics, crossword filling, coloring, packing, and scheduling.
+- Independent Algorithm X solver, Sudoku uniqueness and generation, human-style
+  deductions, clue minimization, and SVG puzzle exports.
+
+## Example
 
 ```js
-import { Model, Solver } from './src/index.js';
+import { Model, Solver, minimizeLinear, solveAsync } from './src/index.js';
 
 const model = new Model()
   .variable('alice', [1, 2, 3])
   .variable('bob', [1, 2, 3])
   .constrain(['alice', 'bob'], (a, b) => a < b, 'ordering');
 
-const result = new Solver(model).solve({ limit: 10, maxNodes: 10000 });
-console.log(result.solutions);
+console.log(new Solver(model).solve({ valueOrder: 'lcv' }).solutions);
+console.log(minimizeLinear(model, { alice: 2, bob: 1 }).best);
+console.log(await solveAsync(model, { wallTimeoutMs: 2000 }));
 ```
 
-## Implemented
+## Correctness and limitations
 
-- Finite domains with validated primitive values and arbitrary predicate constraints.
-- Generalized arc consistency with incident-constraint work queues.
-- Minimum remaining values search with degree tie-breaking and isolated branches.
-- Node/time budgets, AbortSignal checks, and search statistics.
-- N-Queens enumeration, Sudoku solving and uniqueness classification.
-- Seeded Sudoku generation that retains removals only after proving uniqueness.
-- Independent brute-force oracle checks on 100 reproducible networks.
-- Windows/Linux CI on Node 22 and 24, plus instrumented benchmark runs.
+Complete means exhaustive search. Limit and interrupted results never prove
+uniqueness, infeasibility, or optimality. The test suite checks known counts,
+independent brute-force oracles, alternative Sudoku algorithms, cancellation,
+precision boundaries, and public command-line workflows. CI covers Windows and
+Linux on Node 22 and 24.
 
-## Interpretation and limits
+Generic n-ary predicates can be expensive. Global matching is a straightforward
+augmenting-path implementation, not Regin filtering. Linear branch and bound
+requires safe integers; general linear predicates use JS Number semantics.
+Synchronous cancellation is cooperative; use workers for timer-driven aborts.
+Sudoku effort metrics are diagnostic rather than calibrated human ratings.
 
-`complete` means the entire search was exhausted; `limit` means the requested
-solution cap was reached; `interrupted` means a budget or abort stopped search.
-Only exhausted search with exactly one solution proves uniqueness. Sudoku's
-`unknown` result preserves this distinction.
-
-General predicates require tuple enumeration during propagation, which can grow
-exponentially with constraint arity. `allDifferent` currently expands to binary
-inequalities; it does not implement matching-based global propagation. Search
-copies domain maps rather than using a reversible trail. Solutions are collected
-in memory, so callers should use limits for large enumeration tasks.
-
-Timeouts are cooperative. The solver runs synchronously: a same-thread timer
-cannot deliver an AbortSignal while search occupies the event loop. Predicates
-must be pure and terminating; a slow predicate can exceed the budget before the
-next checkpoint. Generation's timeout applies per uniqueness check. A difficult
-target clue count is best effort, and timeout decisions can affect reproducibility
-across machines. Generated grids are transformations of a canonical grid, not
-uniform samples of all Sudoku solutions.
-
-## Development roadmap
-
-The first milestone is a working research foundation. The repository's target is
-at least 100 substantive commits, developed through actual features, fixes, tests,
-and documented engineering decisions. That target is not yet complete.
-
-Next: reversible trails, specialized propagators, proof traces, richer puzzle
-families, strategy comparisons, difficulty calibration, and an interactive explorer.
-
-See [architecture](docs/architecture.md) for algorithm details and extension points.
-
-MIT licensed.
+Read the [API reference](docs/api.md) for input formats and result contracts and
+the [architecture notes](docs/architecture.md) for algorithms and practical limits.
+Commit history records individual features, verification, and fixes. Future work
+includes stronger specialized propagators and an interactive puzzle explorer.
