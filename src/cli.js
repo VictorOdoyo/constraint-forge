@@ -10,7 +10,10 @@ try {
   if (command === '--help' && !args.length) {
     console.log(usage);
   } else {
-    if (command === 'solve-model' && args.length === 1) {
+    if (['inspect','core'].includes(command) && args.length === 1) {
+      const model=deserialize(JSON.parse(readFileSync(args[0],'utf8')));
+      result=command==='inspect'?inspect(model):unsatCore(model,{timeoutMs:10000});
+    } else if (command === 'solve-model' && args.length === 1) {
       result = new Solver(deserialize(JSON.parse(readFileSync(args[0],'utf8')))).solve({limit:1000,timeoutMs:10000});
     } else if (command === 'queens' && args.length === 1) {
       result = new Solver(queens(Number(args[0]))).solve({ limit: 1000, timeoutMs: 10000 });
